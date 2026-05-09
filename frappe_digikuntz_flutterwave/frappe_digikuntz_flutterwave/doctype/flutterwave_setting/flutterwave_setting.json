@@ -1,0 +1,77 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-05-09 17:38:56.593271",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sandbox",
+  "secret_key",
+  "webhook_secret",
+  "column_break_xgef",
+  "public_key",
+  "encryption_key"
+ ],
+ "fields": [
+  {
+   "default": "1",
+   "fieldname": "sandbox",
+   "fieldtype": "Check",
+   "label": "Mode Sandbox ?"
+  },
+  {
+   "fieldname": "secret_key",
+   "fieldtype": "Password",
+   "in_list_view": 1,
+   "label": "Secret Key",
+   "reqd": 1
+  },
+  {
+   "fieldname": "webhook_secret",
+   "fieldtype": "Password",
+   "label": "Webhook Secret"
+  },
+  {
+   "fieldname": "column_break_xgef",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "public_key",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Public Key",
+   "reqd": 1
+  },
+  {
+   "fieldname": "encryption_key",
+   "fieldtype": "Date",
+   "label": "Encryption Key"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-05-09 17:45:24.495262",
+ "modified_by": "Administrator",
+ "module": "Frappe Digikuntz Flutterwave",
+ "name": "Flutterwave Setting",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
