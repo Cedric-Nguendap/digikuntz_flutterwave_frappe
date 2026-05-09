@@ -21,14 +21,12 @@ def test_payment():
     )
 
 
-
-
 @frappe.whitelist()
-def create_payment_link(
-    sales_invoice
-):
+def create_payment_link( sales_invoice ):
 
     service = FlutterwaveService()
+    print("Sales invoices ",sales_invoice)
+
 
     return service.create_invoice_payment(
         sales_invoice

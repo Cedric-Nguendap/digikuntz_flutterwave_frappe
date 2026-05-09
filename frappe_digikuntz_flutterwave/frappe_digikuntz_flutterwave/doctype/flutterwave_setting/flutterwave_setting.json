@@ -37,14 +37,14 @@
   },
   {
    "fieldname": "public_key",
-   "fieldtype": "Date",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Public Key",
    "reqd": 1
   },
   {
    "fieldname": "encryption_key",
-   "fieldtype": "Date",
+   "fieldtype": "Data",
    "label": "Encryption Key"
   }
  ],
@@ -52,7 +52,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-05-09 17:45:24.495262",
+ "modified": "2026-05-09 18:32:18.043958",
  "modified_by": "Administrator",
  "module": "Frappe Digikuntz Flutterwave",
  "name": "Flutterwave Setting",

@@ -29,7 +29,7 @@ class FlutterwaveClient:
         currency="XAF",
         customer_name=None
     ):
-
+    
         payload = {
             "tx_ref": tx_ref,
             "amount": amount,
@@ -48,6 +48,16 @@ class FlutterwaveClient:
         response = requests.post(
             f"{self.base_url}/payments",
             json=payload,
+            headers=self.headers
+        )
+
+        return response.json()
+
+    
+    def verify_transaction(self,transaction_id):
+
+        response = requests.get(
+            f"{self.base_url}/transactions/{transaction_id}/verify",
             headers=self.headers
         )
 
