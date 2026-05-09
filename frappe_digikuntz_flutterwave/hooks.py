@@ -250,3 +250,8 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+# #Patches
+# patches = [
+#     "frappe_digikuntz_flutterwave.patches.v1.create_mode_of_payment"
+# ]
+

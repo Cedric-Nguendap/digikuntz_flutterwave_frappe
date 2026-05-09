@@ -43,7 +43,6 @@ class FlutterwaveService:
             currency=invoice.currency
         )
 
-        print("Response API ",response)
 
         if response.get("status") != "success":
             frappe.throw(
