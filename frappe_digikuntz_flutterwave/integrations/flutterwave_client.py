@@ -55,10 +55,10 @@ class FlutterwaveClient:
 
     
     def verify_transaction(self,transaction_id):
-
+        print("Verifying transaction with ID: ",  f"{self.base_url}/transactions/{transaction_id}/verify",self.headers)
         response = requests.get(
             f"{self.base_url}/transactions/{transaction_id}/verify",
             headers=self.headers
         )
-
+        print("response datan ",response)
         return response.json()

@@ -1,7 +1,7 @@
 import json
 import frappe
 
-from flutterwave_integration.integrations.flutterwave_client import (
+from frappe_digikuntz_flutterwave.integrations.flutterwave_client import (
     FlutterwaveClient
 )
 from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
@@ -14,6 +14,7 @@ class FlutterwaveWebhookService:
         self.settings = frappe.get_single("Flutterwave Setting")
 
         self.client = FlutterwaveClient()
+    
 
     def handle_webhook(self,payload,signature):
 
@@ -81,9 +82,10 @@ class FlutterwaveWebhookService:
             frappe.throw("Missing transaction reference")
 
         # 1. Trouver la facture liée
-        invoice_name = tx_ref.replace("INV-", "")
-
+        invoice_name = frappe.db.get_value( "Sales Invoice", {"name": tx_ref.replace("INV-", "",1)}, "name")
         invoice = frappe.get_doc("Sales Invoice", invoice_name)
+
+        
 
         if invoice.docstatus != 1:
             frappe.throw("Invoice is not submitted")
@@ -96,7 +98,6 @@ class FlutterwaveWebhookService:
             "Payment Entry",
             {"reference_no": data.get("id")}
         )
-
         if existing:
             return "Already processed"
 
@@ -106,14 +107,17 @@ class FlutterwaveWebhookService:
             dn=invoice.name
         )
 
+
         # 4. Ajuster infos
         payment_entry.mode_of_payment = "Flutterwave"
         payment_entry.reference_no = data.get("id")
         payment_entry.reference_date = frappe.utils.today()
 
         # 5. Insérer et soumettre
-        payment_entry.insert()
+        payment_entry.insert(ignore_permissions=True)
         payment_entry.submit()
+        frappe.db.commit()
+        print("Payement entry created: ", payment_entry.name)
 
         # 6. Log
         frappe.logger().info({
@@ -121,3 +125,18 @@ class FlutterwaveWebhookService:
         })
 
         return payment_entry.name
+    
+    def process_success_by_transaction_id(self, transaction_id):
+        transaction = self.client.verify_transaction(transaction_id)
+        return self.process_successful_payment(transaction)
+
+    def handle_transaction_status(self, transaction_id):
+
+        transaction = self.client.verify_transaction(transaction_id)
+
+        status = transaction.get("data", {}).get("status")
+
+        if status == "successful":
+            self.process_successful_payment(transaction)
+
+        return status

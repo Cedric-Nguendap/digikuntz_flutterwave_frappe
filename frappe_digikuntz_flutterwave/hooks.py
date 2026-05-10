@@ -27,6 +27,11 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/frappe_digikuntz_flutterwave/css/frappe_digikuntz_flutterwave.css"
 # app_include_js = "/assets/frappe_digikuntz_flutterwave/js/frappe_digikuntz_flutterwave.js"
+app_include_js = [
+    "/assets/frappe_digikuntz_flutterwave/js/sales_invoice.js"
+]
+
+
 
 # include js, css files in header of web template
 # web_include_css = "/assets/frappe_digikuntz_flutterwave/css/frappe_digikuntz_flutterwave.css"
@@ -250,8 +255,4 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
-# #Patches
-# patches = [
-#     "frappe_digikuntz_flutterwave.patches.v1.create_mode_of_payment"
-# ]
 
