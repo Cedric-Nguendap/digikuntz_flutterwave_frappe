@@ -257,5 +257,5 @@ after_install = "frappe_digikuntz_flutterwave.setup.install.after_install"
 
 
 payment_gateway_enabled = [
-    "Flutterwave"
+    "Flutterwave Gateway"
 ]
