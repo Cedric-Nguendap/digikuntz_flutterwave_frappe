@@ -91,7 +91,7 @@ app_include_js = [
 # ------------
 
 # before_install = "frappe_digikuntz_flutterwave.install.before_install"
-# after_install = "frappe_digikuntz_flutterwave.install.after_install"
+after_install = "frappe_digikuntz_flutterwave.setup.install.after_install"
 
 # Uninstallation
 # ------------
@@ -256,3 +256,6 @@ app_include_js = [
 # ignore_translatable_strings_from = []
 
 
+payment_gateway_enabled = [
+    "Flutterwave"
+]

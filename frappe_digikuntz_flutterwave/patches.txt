@@ -4,4 +4,5 @@
 
 [post_model_sync]
 # Patches added in this section will be executed after doctypes are migrated
-frappe_digikuntz_flutterwave.patches.v1.create_mode_of_payment
+# frappe_digikuntz_flutterwave.patches.v1.create_mode_of_payment
+# frappe_digikuntz_flutterwave.patches.v1.create_payment_gateway
