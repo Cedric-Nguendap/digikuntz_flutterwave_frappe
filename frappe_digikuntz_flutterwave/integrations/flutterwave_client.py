@@ -20,7 +20,7 @@ class FlutterwaveClient:
             "Content-Type": "application/json"
         }
 
-    def initialize_payment(
+    def initialize_web_payment(
         self,
         amount,
         email,
@@ -51,10 +51,49 @@ class FlutterwaveClient:
                 headers=self.headers
             )            
             data = {**response.json(), "status_code": "success"}
+            print("Web payment initialization response: ", data)
         except requests.exceptions.HTTPError as http_err:
             data = {"status_code": "error", "message": str(http_err)}
         return data
 
+    def initialize_mobile_money_payment(
+        self,
+        amount,
+        email,
+        tx_ref,
+        redirect_url,
+        phone_number,
+        network,
+        country="CM",
+        currency="XAF",
+        customer_name=None
+    ):
+    
+        payload = {
+            "tx_ref": tx_ref,
+            "amount": amount,
+            "currency": currency,
+            "country": country,
+            "email": email,
+            "phone_number": phone_number,
+            "fullname": customer_name or email,
+            "network": network,
+            "redirect_url": redirect_url
+        }
+
+        print("paylaod for mobile money charge: ", payload)
+        try:
+            response = requests.post(
+                f"{self.base_url}/charges?type=mobile_money_franco",
+                json=payload,
+                headers=self.headers
+            )            
+            data = {**response.json(), "status_code": "success"}
+            print("Mobile money charge response: ", data)
+        except requests.exceptions.HTTPError as http_err:
+            data = {"status_code": "error", "message": str(http_err)}
+            print("Error initializing mobile money payment: ", data)
+        return data
     
     def verify_transaction(self,transaction_id):
         try:
@@ -65,6 +104,20 @@ class FlutterwaveClient:
             data = {**response.json(), "status_code": "success"}
         except requests.exceptions.HTTPError as http_err:
             data = {"status_code": "error", "message": str(http_err)}
-      
+            print("Error verifying transaction: ", data)
+
+        return data
+
+    def verify_transaction_by_reference(self,reference):
+        try:
+            response = requests.get(
+                f"{self.base_url}/transactions/verify_by_reference?tx_ref={reference}",
+                headers=self.headers
+            )
+            data = {**response.json(), "status_code": "success"}
+            print("Data checked",data,reference)
+        except requests.exceptions.HTTPError as http_err:
+            data = {"status_code": "error", "message": str(http_err)}
+            print("Error verifying transaction: ", data)
 
         return data

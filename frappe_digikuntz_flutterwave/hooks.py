@@ -28,7 +28,7 @@ app_license = "mit"
 # app_include_css = "/assets/frappe_digikuntz_flutterwave/css/frappe_digikuntz_flutterwave.css"
 # app_include_js = "/assets/frappe_digikuntz_flutterwave/js/frappe_digikuntz_flutterwave.js"
 app_include_js = [
-    "/assets/frappe_digikuntz_flutterwave/js/sales_invoice.js"
+    "/assets/frappe_digikuntz_flutterwave/js/payment_request.js"
 ]
 
 

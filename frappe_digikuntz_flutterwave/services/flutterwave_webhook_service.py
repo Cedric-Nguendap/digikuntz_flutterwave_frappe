@@ -33,11 +33,13 @@ class FlutterwaveWebhookService:
         transaction = self.client.verify_transaction(transaction_id)
         return self.process_successful_payment(transaction)
 
-    def handle_transaction_status(self, transaction_id):
+    def handle_transaction_status(self, transaction_id, is_web_payment = True):
 
-        transaction = self.client.verify_transaction(transaction_id)
+        if is_web_payment:
+            transaction = self.client.verify_transaction(transaction_id)
+        else:
+            transaction = self.client.verify_transaction_by_reference(transaction_id)
 
-        print("Transaction verification result: ", transaction)
         if transaction.get("status_code") == "success" and transaction.get("status") != "error":            
             status = transaction.get("data", {}).get("status")
 
