@@ -11,15 +11,13 @@ class FlutterwavePaymentGateway:
         self.settings = frappe.get_single("Flutterwave Setting")
 
     def get_payment_url(self, **kwargs):
-
         reference_doctype = kwargs.get("reference_doctype")
         reference_docname = kwargs.get("reference_docname")
 
         doc = frappe.get_doc(reference_doctype, reference_docname)
-
         service = FlutterwaveService()
 
-        response  = service.create_payment_link(doc)
-
+        response  = service.create_payment_link(doc, payer_email=kwargs.get("payer_email"))
+        
         # return payment_link
         return response["data"]["link"]

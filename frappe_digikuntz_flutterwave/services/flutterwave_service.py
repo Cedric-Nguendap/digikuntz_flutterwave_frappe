@@ -11,30 +11,23 @@ class FlutterwaveService:
 
         self.client = FlutterwaveClient()
 
-    def create_payment_link( self, reference_doc):
+    def create_payment_link( self, reference_doc, payer_email=None):
 
-         # Si Payment Request
-        if reference_doc.doctype == "Payment Request":
+        
 
-            invoice = frappe.get_doc(
-                reference_doc.reference_doctype,
-                reference_doc.reference_name
-            )
+        if reference_doc.outstanding_amount <= 0:
+            frappe.throw("reference_doc already paid")
 
-        else:
-            invoice = reference_doc
-
-        if invoice.outstanding_amount <= 0:
-            frappe.throw("Invoice already paid")
-
-        tx_ref = f"PR-{invoice.name}"
+        tx_ref = f"PR-{reference_doc.name}"
 
         redirect_url = (
             frappe.utils.get_url()
             + "/flutterwave-payment-success"
         )
-
-        email = invoice.contact_email or invoice.owner
+        
+        email = payer_email or reference_doc.email_to or reference_doc.contact_email or reference_doc.owner
+        customer = reference_doc.party or reference_doc.customer_name
+        
 
         # DEBUG TEMPORAIRE
         # email = "tonemail@gmail.com"
@@ -45,15 +38,15 @@ class FlutterwaveService:
             )
 
         response = self.client.initialize_payment(
-            amount=invoice.outstanding_amount,
+            amount=reference_doc.outstanding_amount,
             email=email,
             tx_ref=tx_ref,
             redirect_url=redirect_url,
-            customer_name=invoice.customer_name,
-            currency=invoice.currency
+            customer_name=customer,
+            currency=reference_doc.currency
         )
 
-        if response.get("status") != "success":
+        if response.get("status_code") != "success":
 
             frappe.throw(
                 response.get("message")

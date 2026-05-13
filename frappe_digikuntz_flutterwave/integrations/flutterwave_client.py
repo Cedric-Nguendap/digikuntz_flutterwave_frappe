@@ -44,21 +44,27 @@ class FlutterwaveClient:
                 "description": "Invoice Payment"
             }
         }
-
-        response = requests.post(
-            f"{self.base_url}/payments",
-            json=payload,
-            headers=self.headers
-        )
-
-        return response.json()
+        try:
+            response = requests.post(
+                f"{self.base_url}/payments",
+                json=payload,
+                headers=self.headers
+            )            
+            data = {**response.json(), "status_code": "success"}
+        except requests.exceptions.HTTPError as http_err:
+            data = {"status_code": "error", "message": str(http_err)}
+        return data
 
     
     def verify_transaction(self,transaction_id):
-        print("Verifying transaction with ID: ",  f"{self.base_url}/transactions/{transaction_id}/verify",self.headers)
-        response = requests.get(
-            f"{self.base_url}/transactions/{transaction_id}/verify",
-            headers=self.headers
-        )
-        print("response datan ",response)
-        return response.json()
+        try:
+            response = requests.get(
+                f"{self.base_url}/transactions/{transaction_id}/verify",
+                headers=self.headers
+            )
+            data = {**response.json(), "status_code": "success"}
+        except requests.exceptions.HTTPError as http_err:
+            data = {"status_code": "error", "message": str(http_err)}
+      
+
+        return data
