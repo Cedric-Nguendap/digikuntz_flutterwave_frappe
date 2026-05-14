@@ -53,7 +53,7 @@ class FlutterwaveService:
 
     def mobile_money_charge( self, reference_doc,phone_number, network):
 
-        settings = frappe.get_single("Flutterwave Setting")
+        settings = frappe.get_single("Flutterwave Settings")
         email = reference_doc.email_to or reference_doc.contact_email or reference_doc.owner
         customer = reference_doc.party or reference_doc.customer_name
         redirect_url = (

@@ -81,7 +81,7 @@ def create_payment_gateway():
     gateway = frappe.get_doc({
         "doctype": "Payment Gateway",
         "gateway": "Flutterwave Gateway",
-        "gateway_settings": "Flutterwave Setting",
+        "gateway_settings": "Flutterwave Settings",
         "gateway_controller": "frappe_digikuntz_flutterwave.services.payment_gateway.FlutterwavePaymentGateway"
     })
 

@@ -13,9 +13,9 @@ IGNORE_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 
 
 
-class IntegrationTestFlutterwaveSetting(IntegrationTestCase):
+class IntegrationTestFlutterwaveSettings(IntegrationTestCase):
 	"""
-	Integration tests for FlutterwaveSetting.
+	Integration tests for FlutterwaveSettings.
 	Use this class for testing interactions between multiple components.
 	"""
 

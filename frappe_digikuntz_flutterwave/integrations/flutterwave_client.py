@@ -6,7 +6,7 @@ class FlutterwaveClient:
 
     def __init__(self):
 
-        self.settings = frappe.get_single("Flutterwave Setting")
+        self.settings = frappe.get_single("Flutterwave Settings")
 
         self.base_url = "https://api.flutterwave.com/v3"
 

@@ -6,7 +6,7 @@ from frappe.model.document import Document
 from frappe_digikuntz_flutterwave.services.payment_gateway import ( FlutterwavePaymentGateway )
 
 
-class FlutterwaveSetting(Document):
+class FlutterwaveSettings(Document):
 	supported_currencies = ['NGN', 'GHS', 'ZAR', 'USD','XAF','XOF','EUR','KES']
 
 	def get_payment_url(self, **kwargs):

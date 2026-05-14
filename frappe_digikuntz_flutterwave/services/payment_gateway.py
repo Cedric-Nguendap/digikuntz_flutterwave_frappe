@@ -8,7 +8,7 @@ class FlutterwavePaymentGateway:
 
     def __init__(self):
 
-        self.settings = frappe.get_single("Flutterwave Setting")
+        self.settings = frappe.get_single("Flutterwave Settings")
 
     def get_payment_url(self, **kwargs):
         reference_doctype = kwargs.get("reference_doctype")

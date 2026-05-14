@@ -11,7 +11,7 @@ class FlutterwaveWebhookService:
 
     def __init__(self):
 
-        self.settings = frappe.get_single("Flutterwave Setting")
+        self.settings = frappe.get_single("Flutterwave Settings")
         self.client = FlutterwaveClient()
 
 
