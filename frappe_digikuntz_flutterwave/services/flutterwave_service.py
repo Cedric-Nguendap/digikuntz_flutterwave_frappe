@@ -4,6 +4,7 @@ from frappe_digikuntz_flutterwave.integrations.flutterwave_client import (
     FlutterwaveClient
 )
 
+import frappe_digikuntz_flutterwave.services.utils as utils_func
 
 class FlutterwaveService:
 
@@ -12,7 +13,6 @@ class FlutterwaveService:
         self.client = FlutterwaveClient()
 
     def create_payment_link( self, reference_doc, payer_email=None):
-        print("Reference doc ", reference_doc.__dict__)
         if reference_doc.outstanding_amount <= 0:
             frappe.throw("reference_doc already paid")
 
@@ -25,7 +25,7 @@ class FlutterwaveService:
         
         email = payer_email or reference_doc.email_to or reference_doc.contact_email or reference_doc.owner
         customer = reference_doc.party or reference_doc.customer_name
-        
+        company = frappe.get_doc("Company",reference_doc.company)
 
         if not email or "@" not in email:
             frappe.throw(
@@ -38,6 +38,7 @@ class FlutterwaveService:
             tx_ref=tx_ref,
             redirect_url=redirect_url,
             customer_name=customer,
+            company=company,
             currency=reference_doc.currency
         )
 
@@ -52,18 +53,17 @@ class FlutterwaveService:
 
 
     def mobile_money_charge( self, reference_doc,phone_number, network):
-
         settings = frappe.get_single("Flutterwave Settings")
         email = reference_doc.email_to or reference_doc.contact_email or reference_doc.owner
         customer = reference_doc.party or reference_doc.customer_name
+        company = frappe.get_doc("Company",reference_doc.company)
+
         redirect_url = (
             frappe.utils.get_url()
             + "/flutterwave-payment-success"
         )
 
-        tx_ref = f"PR-{reference_doc.name}"
-
-        
+        tx_ref = f"PR-{reference_doc.name}"        
 
         response_data = self.client.initialize_mobile_money_payment(
             amount=reference_doc.outstanding_amount,
@@ -72,6 +72,7 @@ class FlutterwaveService:
             phone_number=phone_number,
             network=network,
             customer_name=customer,
+            company=company,
             redirect_url=redirect_url,
             currency=reference_doc.currency
         )
@@ -79,3 +80,10 @@ class FlutterwaveService:
         frappe.logger().info(response_data)
 
         return response_data
+
+    def create_subaccount(self, company,account_bank,account_number):
+        business_email = utils_func.get_current_user_email()
+        return self.client.create_subaccount(company,account_bank,account_number,business_email)
+
+    def get_banks(self, country="CM"):
+        return self.client.get_banks(country)

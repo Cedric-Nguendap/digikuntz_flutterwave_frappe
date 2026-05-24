@@ -1,20 +1,18 @@
 import requests
 import frappe
+import frappe_digikuntz_flutterwave.services.utils as utils_func
 
 
 class FlutterwaveClient:
 
     def __init__(self):
-
         self.settings = frappe.get_single("Flutterwave Settings")
-
         self.base_url = "https://api.flutterwave.com/v3"
-
         self.secret_key = self.settings.get_password("secret_key")
+
 
     @property
     def headers(self):
-
         return {
             "Authorization": f"Bearer {self.secret_key}",
             "Content-Type": "application/json"
@@ -27,6 +25,7 @@ class FlutterwaveClient:
         tx_ref,
         redirect_url,
         currency="XAF",
+        company = None,
         customer_name=None
     ):
     
@@ -44,6 +43,12 @@ class FlutterwaveClient:
                 "description": "Invoice Payment"
             }
         }
+
+        if utils_func.shoudl_use_subaccount(company):
+            payload["subaccounts"]= {
+                "id": company.custom_id_du_compte
+            }
+
         try:
             response = requests.post(
                 f"{self.base_url}/payments",
@@ -66,6 +71,7 @@ class FlutterwaveClient:
         network,
         country="CM",
         currency="XAF",
+        company = None,
         customer_name=None
     ):
     
@@ -81,7 +87,11 @@ class FlutterwaveClient:
             "redirect_url": redirect_url
         }
 
-        print("paylaod for mobile money charge: ", payload)
+        if utils_func.shoudl_use_subaccount(company):
+            payload["subaccounts"]= {
+                "id": company.custom_id_du_compte
+            }
+
         try:
             response = requests.post(
                 f"{self.base_url}/charges?type=mobile_money_franco",
@@ -89,12 +99,11 @@ class FlutterwaveClient:
                 headers=self.headers
             )            
             data = {**response.json(), "status_code": "success"}
-            print("Mobile money charge response: ", data)
         except requests.exceptions.HTTPError as http_err:
             data = {"status_code": "error", "message": str(http_err)}
-            print("Error initializing mobile money payment: ", data)
         return data
     
+
     def verify_transaction(self,transaction_id):
         try:
             response = requests.get(
@@ -104,9 +113,9 @@ class FlutterwaveClient:
             data = {**response.json(), "status_code": "success"}
         except requests.exceptions.HTTPError as http_err:
             data = {"status_code": "error", "message": str(http_err)}
-            print("Error verifying transaction: ", data)
 
         return data
+    
 
     def verify_transaction_by_reference(self,reference):
         try:
@@ -115,9 +124,33 @@ class FlutterwaveClient:
                 headers=self.headers
             )
             data = {**response.json(), "status_code": "success"}
-            print("Data checked",data,reference)
         except requests.exceptions.HTTPError as http_err:
             data = {"status_code": "error", "message": str(http_err)}
-            print("Error verifying transaction: ", data)
 
         return data
+    
+
+    def create_subaccount(self, company,account_bank,account_number,business_email):
+        payload = {
+            "account_bank": account_bank,
+            "account_number": account_number,
+            "business_name": company.company_name,
+            "business_email": business_email,
+            "split_type": "percentage",
+            "split_value": 0
+        }
+        response = requests.post(
+            f"{self.base_url}/subaccounts",
+            json=payload,
+            headers=self.headers
+        )
+        return response.json()
+    
+
+
+    def get_banks(self, country):
+
+        response = requests.get(f"{self.base_url}/banks/{country}",headers=self.headers)
+
+        return response.json()
+    
