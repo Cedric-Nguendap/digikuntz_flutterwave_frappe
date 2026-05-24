@@ -46,7 +46,7 @@ class FlutterwaveClient:
 
         if utils_func.shoudl_use_subaccount(company):
             payload["subaccounts"]= {
-                "id": company.custom_id_du_compte
+                "id": company.custom_sous_compte_par_defaut
             }
 
         try:
@@ -89,7 +89,7 @@ class FlutterwaveClient:
 
         if utils_func.shoudl_use_subaccount(company):
             payload["subaccounts"]= {
-                "id": company.custom_id_du_compte
+                "id": company.custom_sous_compte_par_defaut
             }
 
         try:
@@ -146,6 +146,12 @@ class FlutterwaveClient:
         )
         return response.json()
     
+    def get_all_subaccount(self):
+        response = requests.get(
+            f"{self.base_url}/subaccounts",
+            headers=self.headers
+        )
+        return response.json()
 
 
     def get_banks(self, country):

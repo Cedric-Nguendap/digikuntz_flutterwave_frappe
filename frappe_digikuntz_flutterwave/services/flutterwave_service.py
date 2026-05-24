@@ -81,6 +81,9 @@ class FlutterwaveService:
 
         return response_data
 
+    def sync_subaccount(self):
+        return self.client.get_all_subaccount()
+
     def create_subaccount(self, company,account_bank,account_number):
         business_email = utils_func.get_current_user_email()
         return self.client.create_subaccount(company,account_bank,account_number,business_email)

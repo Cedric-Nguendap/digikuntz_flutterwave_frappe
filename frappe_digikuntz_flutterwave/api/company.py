@@ -5,36 +5,33 @@ from frappe_digikuntz_flutterwave.services.flutterwave_service import (
 )
 
 @frappe.whitelist()
-def sync_flutterwave_company(company,banque_de_reglement,account_number):
+def sync_flutterwave_company(company):
 
-    company_doc = frappe.get_doc("Company", company)
-
-    if company_doc.custom_id_du_compte:
-        return {
-            "status": "already_synced"
-        }   
 
     service = FlutterwaveService()
 
-    response = service.create_subaccount(company_doc,banque_de_reglement,account_number)
+    response = service.sync_subaccount()
 
+    if response.get("status")!="success":
+        return {
+            "status":"error",
+            "message":response.get("message")
+        }
     print("Response sync flutterwave ",response)
     data = response.get("data", {})
 
-    company_doc.custom_id_du_compte = data.get(
-        "subaccount_id"
-    )
-
-    company_doc.custom_account_number = data.get(
-        "account_number"
-    )
-
-    company_doc.custom_banque_de_reglement = data.get(
-        "bank_name"
-    )
-
-    company_doc.custom_nom_du_compte = company
-
+    company_doc = frappe.get_doc("Company",company)
+    company_doc.set("custom_sous_compte_disponible", [])
+	
+    for d in data:
+        company_doc.append("custom_sous_compte_disponible", {
+            "subaccount_id": d["subaccount_id"],
+            "bank_name": d["bank_name"],
+            "pourcentance": d["split_value"],
+            "business_name":d["business_name"],
+            "country":d["country"],
+        })
+    company_doc.save()
 
     company_doc.save(ignore_permissions=True)
 
