@@ -34,9 +34,9 @@ function sync_flutterwave(frm) {
         },
         freeze: true,
         freeze_message: __("Sync Flutterwave subaccount..."),
-
-        callback(r) {
-            if (!r.exc) {
+        callback(e) {
+            // console.log("R ",e,e.exc)
+            if (!e.exc) {
                 if (e.message && e.message.status=="success")
                 {
                     frappe.show_alert({
@@ -56,7 +56,7 @@ function sync_flutterwave(frm) {
                 {
                     frappe.msgprint({
                         title: __('Erreur'),
-                        message: r.message.error || __('An error occured'),
+                        message: e.message.error || __('An error occured'),
                         indicator: 'red'
                     });
                 }
@@ -65,7 +65,7 @@ function sync_flutterwave(frm) {
             else {
                 frappe.msgprint({
                     title: __('Erreur'),
-                    message: r.message.error || __('An error occured'),
+                    message: e.message.error || __('An error occured'),
                     indicator: 'red'
                 });
             }

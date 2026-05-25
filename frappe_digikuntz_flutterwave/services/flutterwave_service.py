@@ -13,6 +13,7 @@ class FlutterwaveService:
         self.client = FlutterwaveClient()
 
     def create_payment_link( self, reference_doc, payer_email=None):
+        # print("Creating payment link for doc ", reference_doc.__dict__)
         if reference_doc.outstanding_amount <= 0:
             frappe.throw("reference_doc already paid")
 

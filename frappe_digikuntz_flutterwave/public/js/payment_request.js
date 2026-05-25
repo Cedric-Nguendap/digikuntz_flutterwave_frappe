@@ -1,5 +1,6 @@
 frappe.ui.form.on('Payment Request', {
     refresh: function(frm) {
+        
         if (frm.doc.status !== "Paid" && frm.doc.docstatus === 1) {
             
             frm.add_custom_button(__('Lancer le Prompt MoMo'), function() {

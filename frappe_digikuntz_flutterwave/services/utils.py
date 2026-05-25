@@ -10,5 +10,4 @@ def get_current_user_email():
 
 
 def shoudl_use_subaccount(company):
-    company_doc = frappe.get_doc("Company", company)
-    return company_doc.custom_activer and company_doc.custom_sous_compte_par_defaut
+    return company.custom_activer and company.custom_sous_compte_par_defaut
