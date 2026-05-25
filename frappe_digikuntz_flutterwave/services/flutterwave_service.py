@@ -13,9 +13,9 @@ class FlutterwaveService:
         self.client = FlutterwaveClient()
 
     def create_payment_link( self, reference_doc, payer_email=None):
-        # print("Creating payment link for doc ", reference_doc.__dict__)
         if reference_doc.outstanding_amount <= 0:
-            frappe.throw("reference_doc already paid")
+        # if reference_doc.grand_total <= 0:
+            frappe.throw(f"{reference_doc.reference_doctype} is already paid")
 
         tx_ref = f"PR-{reference_doc.name}"
 
@@ -34,6 +34,7 @@ class FlutterwaveService:
             )
 
         response = self.client.initialize_web_payment(
+            # amount=reference_doc.grand_total,
             amount=reference_doc.outstanding_amount,
             email=email,
             tx_ref=tx_ref,

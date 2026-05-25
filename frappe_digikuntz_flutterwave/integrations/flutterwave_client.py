@@ -44,11 +44,14 @@ class FlutterwaveClient:
             }
         }
 
-        if utils_func.shoudl_use_subaccount(company):
-            payload["subaccounts"]= {
-                "id": company.custom_sous_compte_par_defaut
-            }
 
+        if utils_func.shoudl_use_subaccount(company):
+            payload["subaccounts"]= [
+                {
+                    "id": company.custom_sous_compte_par_defaut
+                }
+            ]
+        
         try:
             response = requests.post(
                 f"{self.base_url}/payments",
@@ -56,7 +59,6 @@ class FlutterwaveClient:
                 headers=self.headers
             )            
             data = {**response.json(), "status_code": "success"}
-            print("Web payment initialization response: ", data)
         except requests.exceptions.HTTPError as http_err:
             data = {"status_code": "error", "message": str(http_err)}
         return data
@@ -87,10 +89,13 @@ class FlutterwaveClient:
             "redirect_url": redirect_url
         }
 
+
         if utils_func.shoudl_use_subaccount(company):
-            payload["subaccounts"]= {
-                "id": company.custom_sous_compte_par_defaut
-            }
+            payload["subaccounts"]= [
+                {
+                    "id": company.custom_sous_compte_par_defaut
+                }
+            ]
 
         try:
             response = requests.post(
