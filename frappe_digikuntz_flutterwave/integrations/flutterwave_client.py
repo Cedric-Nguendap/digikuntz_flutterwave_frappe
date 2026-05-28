@@ -44,11 +44,19 @@ class FlutterwaveClient:
             }
         }
 
+        if not utils_func.can_use_flutterwave():
+            frappe.throw(
+                msg="Impossible de procéder au paiement car le composant Flutterwave est désactivé.<br><br>Veuillez contacter l'administrateur pour plus de détails.",
+                title="Composant Inactif",
+                exc=frappe.ValidationError
+            )
 
-        if utils_func.shoudl_use_subaccount(company):
+        if utils_func.should_use_subaccount(company):
+            id_sous_compte = frappe.get_doc("Flutterwave SubAccount", company.custom_sous_compte_par_defaut).subaccount_id
+
             payload["subaccounts"]= [
                 {
-                    "id": company.custom_sous_compte_par_defaut
+                    "id": id_sous_compte
                 }
             ]
         
@@ -89,11 +97,18 @@ class FlutterwaveClient:
             "redirect_url": redirect_url
         }
 
+        if not utils_func.can_use_flutterwave():
+            frappe.throw(
+                msg="Impossible de procéder au paiement car le composant Flutterwave est désactivé.<br><br>Veuillez contacter l'administrateur pour plus de détails.",
+                title="Flutterwave Inactif",
+                exc=frappe.ValidationError
+            )
 
-        if utils_func.shoudl_use_subaccount(company):
+        if utils_func.should_use_subaccount(company):
+            id_sous_compte = frappe.get_doc("Flutterwave SubAccount", company.custom_sous_compte_par_defaut).subaccount_id
             payload["subaccounts"]= [
                 {
-                    "id": company.custom_sous_compte_par_defaut
+                    "id": id_sous_compte
                 }
             ]
 
@@ -111,6 +126,13 @@ class FlutterwaveClient:
 
     def verify_transaction(self,transaction_id):
         try:
+            if not utils_func.can_use_flutterwave():
+                frappe.throw(
+                    msg="Impossible de procéder a la vérification du paiement car le composant Flutterwave est désactivé.<br><br>Veuillez contacter l'administrateur pour plus de détails.",
+                    title="Flutterwave Inactif",
+                    exc=frappe.ValidationError
+                )
+
             response = requests.get(
                 f"{self.base_url}/transactions/{transaction_id}/verify",
                 headers=self.headers
@@ -124,6 +146,12 @@ class FlutterwaveClient:
 
     def verify_transaction_by_reference(self,reference):
         try:
+            if not utils_func.can_use_flutterwave():
+                frappe.throw(
+                    msg="Impossible de procéder a la vérification du paiement car le composant Flutterwave est désactivé.<br><br>Veuillez contacter l'administrateur pour plus de détails.",
+                    title="Flutterwave Inactif",
+                    exc=frappe.ValidationError
+                )
             response = requests.get(
                 f"{self.base_url}/transactions/verify_by_reference?tx_ref={reference}",
                 headers=self.headers
@@ -144,6 +172,12 @@ class FlutterwaveClient:
             "split_type": "percentage",
             "split_value": 0
         }
+        if not utils_func.can_use_flutterwave():
+            frappe.throw(
+                msg="Impossible de procéder a la création du sous-compte car le composant Flutterwave est désactivé.<br><br>Veuillez contacter l'administrateur pour plus de détails.",
+                title="Flutterwave Inactif",
+                exc=frappe.ValidationError
+            )
         response = requests.post(
             f"{self.base_url}/subaccounts",
             json=payload,
@@ -152,6 +186,12 @@ class FlutterwaveClient:
         return response.json()
     
     def get_all_subaccount(self):
+        if not utils_func.can_use_flutterwave():
+            frappe.throw(
+                msg="Impossible de procéder a la récupération des sous-comptes car le composant Flutterwave est désactivé.<br><br>Veuillez contacter l'administrateur pour plus de détails.",
+                title="Flutterwave Inactif",
+                exc=frappe.ValidationError
+            )
         response = requests.get(
             f"{self.base_url}/subaccounts",
             headers=self.headers
@@ -161,6 +201,12 @@ class FlutterwaveClient:
 
     def get_banks(self, country):
 
+        if not utils_func.can_use_flutterwave():
+            frappe.throw(
+                msg="Impossible de procéder a la récupération des banques car le composant Flutterwave est désactivé.<br><br>Veuillez contacter l'administrateur pour plus de détails.",
+                title="Flutterwave Inactif",
+                exc=frappe.ValidationError
+            )
         response = requests.get(f"{self.base_url}/banks/{country}",headers=self.headers)
 
         return response.json()

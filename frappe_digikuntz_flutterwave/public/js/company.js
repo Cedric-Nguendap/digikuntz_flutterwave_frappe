@@ -87,6 +87,15 @@ frappe.ui.form.on("Company", {
             return;
         }      
         frm.add_custom_button( __("Sync Flutterwave"),() => sync_flutterwave(frm) );
+        if(frm.doc.custom_sous_compte_par_defaut) {
+            frappe.db.get_doc("Flutterwave SubAccount", frm.doc.custom_sous_compte_par_defaut).then(subaccount => {
+                //  frm.doc.custom_pays.set_value(subaccount.country);
+                //  frm.doc.custom_compte_bancaire.set_value(subaccount.bank_name);
+                //  frm.doc["custom_numéro_du_compte"].set_value(subaccount.bank_name);
+
+            });
+        }
+           
     }
 
 });

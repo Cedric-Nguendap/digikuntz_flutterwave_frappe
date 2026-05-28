@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:subaccount_id",
+ "autoname": "field:business_name",
  "creation": "2026-05-24 14:54:14.921953",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -11,7 +11,8 @@
   "pourcentance",
   "column_break_eoka",
   "business_name",
-  "country"
+  "country",
+  "account_number"
  ],
  "fields": [
   {
@@ -28,7 +29,8 @@
    "fieldname": "business_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Business"
+   "label": "Business",
+   "unique": 1
   },
   {
    "fieldname": "country",
@@ -48,22 +50,40 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Compte bancaire"
+  },
+  {
+   "fieldname": "account_number",
+   "fieldtype": "Data",
+   "label": "Num\u00e9ro du compte"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "istable": 1,
  "links": [],
- "modified": "2026-05-24 16:15:56.689458",
+ "modified": "2026-05-28 05:18:07.142824",
  "modified_by": "Administrator",
  "module": "Frappe Digikuntz Flutterwave",
  "name": "Flutterwave SubAccount",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
- "permissions": [],
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "subaccount_id"
 }

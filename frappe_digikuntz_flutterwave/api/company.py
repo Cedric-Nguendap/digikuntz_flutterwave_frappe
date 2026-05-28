@@ -17,24 +17,24 @@ def sync_flutterwave_company(company):
             "status":"error",
             "message":response.get("message")
         }
-    print("Response sync flutterwave ",response)
     data = response.get("data", {})
 
     company_doc = frappe.get_doc("Company",company)
-    company_doc.set("custom_sous_compte_disponible", [])
-	
-    for d in data:
-        company_doc.append("custom_sous_compte_disponible", {
-            "subaccount_id": d["subaccount_id"],
-            "bank_name": d["bank_name"],
-            "pourcentance": d["split_value"],
-            "business_name":d["business_name"],
-            "country":d["country"],
-        })
-    company_doc.save()
-
+    company_doc.custom_sous_compte_par_defaut = None
     company_doc.save(ignore_permissions=True)
 
+    frappe.db.delete("Flutterwave SubAccount")	
+    for d in data:
+        new_doc = frappe.get_doc(
+            {  "doctype": "Flutterwave SubAccount",                   
+                "subaccount_id": d["subaccount_id"],
+                "bank_name": d["bank_name"],
+                "pourcentance": d["split_value"],
+                "business_name":d["business_name"],
+                "country":d["country"],
+                "account_number":d["account_number"],
+            })
+        new_doc.insert(ignore_permissions=True)
     frappe.db.commit()
 
     return {

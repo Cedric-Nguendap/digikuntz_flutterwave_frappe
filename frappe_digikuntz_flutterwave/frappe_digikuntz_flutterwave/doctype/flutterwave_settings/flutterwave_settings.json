@@ -5,7 +5,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "sandbox",
+  "enable_flutterwave",
   "secret_key",
   "webhook_secret",
   "column_break_xgef",
@@ -13,12 +13,6 @@
   "encryption_key"
  ],
  "fields": [
-  {
-   "default": "1",
-   "fieldname": "sandbox",
-   "fieldtype": "Check",
-   "label": "Mode Sandbox ?"
-  },
   {
    "fieldname": "secret_key",
    "fieldtype": "Password",
@@ -46,13 +40,19 @@
    "fieldname": "encryption_key",
    "fieldtype": "Data",
    "label": "Encryption Key"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_flutterwave",
+   "fieldtype": "Check",
+   "label": "Activer"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-05-09 18:32:18.043958",
+ "modified": "2026-05-28 05:41:48.403754",
  "modified_by": "Administrator",
  "module": "Frappe Digikuntz Flutterwave",
  "name": "Flutterwave Settings",
