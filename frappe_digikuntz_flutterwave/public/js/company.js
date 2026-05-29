@@ -1,29 +1,47 @@
-// frappe.ui.form.on("Company", {
+frappe.ui.form.on("Company", {
 
-//     refresh(frm) {
+    custom_sous_compte_par_defaut(frm) {
 
-//         if (!frm.doc.custom_activer) {
-//             return;
-//         }
+       let selected_value = frm.doc.custom_sous_compte_par_defaut;
+        if(selected_value)
+        {
+            frappe.call({
+                method: "frappe_digikuntz_flutterwave.api.company.get_subaccount_infos",
+                args: {
+                    subaccount_businness_name: selected_value,
+                },
+                freeze: true,
+                freeze_message: __("Load subaccount infos..."),
+                callback(e) {
+                    if (!e.exc) {
+                        if (e.message) {
+                            frm.set_value("custom_banque", e.message.bank_name);
+                            frm.set_value("custom_numero_de_compte", e.message.account_number);
+                            // frm.reload_doc();
+                        }
 
-//         // PAS encore synchronisé
-//         if (!frm.doc.custom_id_du_compte) {
+                    }
+                    else
+                    {
+                        frappe.msgprint({
+                            title: __('Erreur'),
+                            message: e.message.error || __('An error occured'),
+                            indicator: 'red'
+                        });
+                    }
+                }
+            })
+        }
+        else
+        {
+            frm.set_value("custom_banque", "");
+            frm.set_value("custom_numero_de_compte", "");
+        }
+        
 
-//             frm.add_custom_button( __("Sync Flutterwave"),() => sync_flutterwave(frm) );
+    }
 
-//         } else {
-
-//             frm.dashboard.add_comment(
-//                 __( "Flutterwave subaccount connected: {0}", [frm.doc.custom_id_du_compte]),
-//                 "green",
-//                 true
-//             );
-
-//         }
-
-//     }
-
-// });
+});
 
 
 function sync_flutterwave(frm) {   

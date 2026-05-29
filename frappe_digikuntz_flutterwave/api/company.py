@@ -40,3 +40,12 @@ def sync_flutterwave_company(company):
     return {
         "status": "success"
     }
+
+@frappe.whitelist()
+def get_subaccount_infos(subaccount_businness_name):
+    subaccount = frappe.get_doc("Flutterwave SubAccount", subaccount_businness_name)
+
+    return {
+        "bank_name":subaccount.bank_name,
+        "account_number": subaccount.account_number
+    }

@@ -52,8 +52,6 @@ class FlutterwaveService:
             )
         return response
     
-
-
     def mobile_money_charge( self, reference_doc,phone_number, network):
         settings = frappe.get_single("Flutterwave Settings")
         email = reference_doc.email_to or reference_doc.contact_email or reference_doc.owner
@@ -89,6 +87,9 @@ class FlutterwaveService:
     def create_subaccount(self, company,account_bank,account_number):
         business_email = utils_func.get_current_user_email()
         return self.client.create_subaccount(company,account_bank,account_number,business_email)
+
+    def load_subaccount_infos(self,subaccount_id):
+        return self.client.get_subaccount_infos(subaccount_id)
 
     def get_banks(self, country="CM"):
         return self.client.get_banks(country)

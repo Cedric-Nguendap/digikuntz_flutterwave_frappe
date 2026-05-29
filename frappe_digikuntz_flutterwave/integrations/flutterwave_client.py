@@ -197,6 +197,25 @@ class FlutterwaveClient:
             headers=self.headers
         )
         return response.json()
+    
+    def get_subaccount_infos(self,subaccount_id):
+        if not utils_func.can_use_flutterwave():
+            frappe.throw(
+                msg="Impossible de récupérer les informations du sous-comptes car le composant Flutterwave est désactivé.<br><br>Veuillez contacter l'administrateur pour plus de détails.",
+                title="Flutterwave Inactif",
+                exc=frappe.ValidationError
+            )
+        
+        payload = {
+            "id": subaccount_id
+        }
+
+        response  = requests.get(
+             f"{self.base_url}/subaccounts",
+            json=payload,
+            headers=self.headers
+        )
+        return response.json()
 
 
     def get_banks(self, country):
