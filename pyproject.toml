@@ -17,7 +17,7 @@ build-backend = "flit_core.buildapi"
 
 # These dependencies are only installed when developer mode is enabled
 [tool.bench.frappe-dependencies]
-frappe = "~=16.0.0"
+frappe = ">=16.1"
 
 [tool.ruff]
 line-length = 110
